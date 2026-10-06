@@ -1,0 +1,20 @@
+[Desktop Entry]
+Name=Help
+Comment=Guides for the desktop, your apps and your system
+Exec=singularity-help %U
+Icon=dev.sinty.help
+Terminal=false
+Type=Application
+Categories=Utility;Documentation;
+MimeType=x-scheme-handler/help;x-scheme-handler/man;
+Keywords=help;guide;manual;documentation;how;
+StartupWMClass=dev.sinty.help
+Actions=getting-started;shortcuts;
+
+[Desktop Action getting-started]
+Name=Getting Started
+Exec=singularity-help help:singularity/getting-started
+
+[Desktop Action shortcuts]
+Name=Keyboard Shortcuts
+Exec=singularity-help help:singularity/shortcuts

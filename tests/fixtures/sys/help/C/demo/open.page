@@ -1,0 +1,7 @@
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="open">
+  <info><link type="guide" xref="index#basics"/><desc>Open a file from disk.</desc></info>
+  <title>Open a File</title>
+  <p>Press <keyseq><key>Ctrl</key><key>O</key></keyseq> and pick <link xref="save">a file</link>.</p>
+  <steps><item><p>First step</p></item><item><p>Second step</p></item></steps>
+  <note style="warning"><p>Careful here.</p></note>
+</page>

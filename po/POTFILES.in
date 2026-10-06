@@ -1,0 +1,5 @@
+src/app.vala
+src/window.vala
+src/mallard.vala
+src/library.vala
+src/search.vala
