@@ -23,4 +23,4 @@ Swipe with several fingers on the touchpad:
 
 You can combine directions in one movement: swipe sideways to pick a workspace, then down to open its overview.
 
-> Choose whether gestures use three or four fingers, and how sensitive they are, in **Settings > Keyboard**.
+> Choose whether gestures use three or four fingers, and how sensitive they are, in **Settings > Keyboard > Touchpad Gestures**.

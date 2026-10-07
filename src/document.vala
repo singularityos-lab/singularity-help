@@ -75,6 +75,25 @@ namespace Singularity.Apps.Help {
             return Markup.escape_text (s);
         }
 
+        public static string? settings_page_for (string text) {
+            if (!text.has_prefix ("Settings > ")) return null;
+            string[] path = text.substring (11).split (" > ");
+            string label = path[0].strip ();
+            string row = path.length > 1 ? "#" + path[1].strip () : "";
+            string[] labels = { "Network", "Sharing", "Apps", "Autostart", "Privacy", "Users", "Online Accounts", "Displays",
+                "Region & Language", "Date & Time", "Desktop", "Sound", "Notifications", "Wellbeing", "Bluetooth",
+                "Connected Devices", "Printers", "Keyboard", "Graphics Tablet", "Accessibility", "Plugins", "Power",
+                "Performance", "Updates", "System", "Developer" };
+            string[] pages = { "network", "sharing", "apps", "autostart", "privacy", "users", "accounts", "displays",
+                "region", "datetime", "desktop", "sound", "notifications", "wellbeing", "bluetooth",
+                "connected-devices", "printers", "keyboard", "tablet", "accessibility", "plugins", "power",
+                "performance", "updates", "system", "developer" };
+            for (int i = 0; i < labels.length; i++) {
+                if (labels[i] == label) return pages[i] + row;
+            }
+            return null;
+        }
+
         public static string inline (string text) {
             var sb = new StringBuilder ();
             int i = 0;
@@ -92,7 +111,10 @@ namespace Singularity.Apps.Help {
                 if (c == '*' && i + 1 < n && text[i + 1] == '*') {
                     int end = text.index_of ("**", i + 2);
                     if (end > i) {
-                        sb.append ("<b>" + inline (text.substring (i + 2, end - i - 2)) + "</b>");
+                        string strong = text.substring (i + 2, end - i - 2);
+                        string? page = settings_page_for (strong);
+                        if (page != null) sb.append ("<a href=\"settings:%s\"><b>%s</b></a>".printf (escape (page), inline (strong)));
+                        else sb.append ("<b>" + inline (strong) + "</b>");
                         i = end + 2;
                         continue;
                     }

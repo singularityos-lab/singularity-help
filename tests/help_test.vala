@@ -7,6 +7,10 @@ string fx (string p) {
 void test_markdown () {
     var p = Markdown.parse ("---\ntitle: T\ndescription: D\n---\n\nSome *em* and **strong** [link](other) text.\n\n- [A -- first](a)\n- [B](b)\n\n1. one\n2. two\n\n- plain item\n\n> note line\n\n```\ncode <x>\n```\n", "p", "/tmp");
     assert (p.title == "T" && p.description == "D");
+    assert (Markdown.settings_page_for ("Settings > Network") == "network");
+    assert (Markdown.settings_page_for ("Settings > Keyboard > Touchpad Gestures") == "keyboard#Touchpad Gestures");
+    assert (Markdown.settings_page_for ("Settings > Nowhere") == null);
+    assert (Markdown.inline ("in **Settings > Region & Language > Formats**").contains ("<a href=\"settings:region#Formats\">"));
     assert (p.blocks[0].kind == BlockKind.PARAGRAPH);
     assert (p.blocks[0].markup.contains ("<i>em</i>") && p.blocks[0].markup.contains ("<b>strong</b>") && p.blocks[0].markup.contains ("<a href=\"other\">"));
     assert (p.blocks[1].kind == BlockKind.LINKS && p.blocks[1].links.size == 2 && p.blocks[1].links[0].description == "first");
@@ -98,8 +102,9 @@ void test_shipped_guide () {
         foreach (var b in p.blocks) {
             foreach (var l in b.links) assert (book.page (l.target) != null);
             try {
-                Pango.parse_markup (b.markup, -1, 0, null, null, null);
-                foreach (string i in b.items) Pango.parse_markup (i, -1, 0, null, null, null);
+                var anchors = new Regex ("</?a( [^>]*)?>");
+                Pango.parse_markup (anchors.replace (b.markup, -1, 0, ""), -1, 0, null, null, null);
+                foreach (string i in b.items) Pango.parse_markup (anchors.replace (i, -1, 0, ""), -1, 0, null, null, null);
             } catch (Error e) {
                 error ("%s: bad markup %s", id, e.message);
             }

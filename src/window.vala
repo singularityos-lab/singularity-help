@@ -237,9 +237,23 @@ namespace Singularity.Apps.Help {
             return l;
         }
 
+        private async void open_settings (string page) {
+            try {
+                var bus = yield GLib.Bus.get (BusType.SESSION);
+                yield bus.call ("dev.sinty.desktop", "/dev/sinty/Shell", "dev.sinty.Shell", "OpenSettings",
+                    new Variant ("(s)", page), null, DBusCallFlags.NONE, 5000);
+            } catch (Error e) {
+                warning ("Help: could not open Settings > %s: %s", page, e.message);
+            }
+        }
+
         private void follow (string uri) {
             if (uri.has_prefix ("http://") || uri.has_prefix ("https://") || uri.has_prefix ("mailto:")) {
                 new UriLauncher (uri).launch.begin (this, null);
+                return;
+            }
+            if (uri.has_prefix ("settings:")) {
+                open_settings.begin (uri.substring (9));
                 return;
             }
             if (uri.has_prefix ("help:") || uri.has_prefix ("man:")) {
