@@ -25,7 +25,7 @@ endif
 core = files('src/document.vala', 'src/mallard.vala', 'src/library.vala')
 
 executable('singularity-help',
-  core + files('src/window.vala', 'src/search.vala', 'src/app.vala'),
+  core + files('src/window.vala', 'src/search.vala', 'src/agent_intents.vala', 'src/app.vala'),
   dependencies: [gtk_dep, gee_dep, xml_dep, gio_unix_dep, libsingularity_dep],
   install: true
 )
