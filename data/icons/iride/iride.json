@@ -1,0 +1,303 @@
+{
+ "format": 1,
+ "canvas": [
+  128,
+  128
+ ],
+ "box": [
+  0,
+  0,
+  128,
+  128
+ ],
+ "stack": [
+  {
+   "layer": "layers/acqua-dietro.svg",
+   "piece": "water-back"
+  },
+  {
+   "shadow": {
+    "dx": 0,
+    "dy": 2.8,
+    "blur": 3.2,
+    "color": "#1a2438",
+    "opacity": 0.42,
+    "region": [
+     -12,
+     -12,
+     152,
+     152
+    ]
+   },
+   "stack": [
+    {
+     "layer": "layers/000.svg",
+     "piece": "lifebuoy"
+    },
+    {
+     "layer": "layers/001.svg",
+     "piece": "lifebuoy"
+    }
+   ]
+  },
+  {
+   "layer": "layers/002.svg",
+   "piece": "lifebuoy"
+  },
+  {
+   "layer": "layers/003.svg",
+   "piece": "lifebuoy"
+  },
+  {
+   "layer": "layers/004.svg",
+   "piece": "lifebuoy"
+  },
+  {
+   "layer": "layers/005.svg",
+   "piece": "lifebuoy"
+  },
+  {
+   "layer": "layers/006.svg",
+   "piece": "lifebuoy"
+  },
+  {
+   "rim": "M14 62A50 50 0 1 0 114 62A50 50 0 1 0 14 62ZM38 62A26 26 0 1 0 90 62A26 26 0 1 0 38 62Z",
+   "light": [
+    14.0,
+    12.0,
+    114.0,
+    112.0
+   ],
+   "rule": "evenodd",
+   "piece": "lifebuoy"
+  },
+  {
+   "layer": "layers/acqua-davanti.svg",
+   "piece": "water-front"
+  }
+ ],
+ "motion": [
+  {
+   "piece": "water-back",
+   "origin": [
+    64.0,
+    102.4
+   ],
+   "tracks": [
+    {
+     "kind": "scale",
+     "from": [
+      1,
+      1.2
+     ],
+     "at": 180,
+     "duration": 90,
+     "ease": "linear"
+    },
+    {
+     "kind": "scale",
+     "from": [
+      1.03,
+      0.68
+     ],
+     "at": 270,
+     "duration": 130,
+     "ease": "linear"
+    },
+    {
+     "kind": "scale",
+     "from": [
+      0.97,
+      1.12
+     ],
+     "at": 400,
+     "duration": 160,
+     "ease": "out"
+    }
+   ]
+  },
+  {
+   "piece": "lifebuoy",
+   "origin": [
+    64.0,
+    64.0
+   ],
+   "tracks": [
+    {
+     "kind": "translate",
+     "from": [
+      0,
+      -117.76
+     ],
+     "at": 0,
+     "duration": 230,
+     "ease": "linear"
+    },
+    {
+     "kind": "translate",
+     "from": [
+      0,
+      16.64
+     ],
+     "at": 230,
+     "duration": 170,
+     "ease": "out"
+    },
+    {
+     "kind": "translate",
+     "from": [
+      0,
+      -10.88
+     ],
+     "at": 400,
+     "duration": 170,
+     "ease": "linear"
+    },
+    {
+     "kind": "translate",
+     "from": [
+      0,
+      4.736
+     ],
+     "at": 570,
+     "duration": 180,
+     "ease": "linear"
+    },
+    {
+     "kind": "translate",
+     "from": [
+      0,
+      -1.536
+     ],
+     "at": 750,
+     "duration": 170,
+     "ease": "linear"
+    },
+    {
+     "kind": "rotate",
+     "from": [
+      -59
+     ],
+     "at": 0,
+     "duration": 230,
+     "ease": "linear"
+    },
+    {
+     "kind": "rotate",
+     "from": [
+      16
+     ],
+     "at": 230,
+     "duration": 170,
+     "ease": "out"
+    },
+    {
+     "kind": "rotate",
+     "from": [
+      -12
+     ],
+     "at": 400,
+     "duration": 170,
+     "ease": "linear"
+    },
+    {
+     "kind": "rotate",
+     "from": [
+      7
+     ],
+     "at": 570,
+     "duration": 180,
+     "ease": "linear"
+    },
+    {
+     "kind": "rotate",
+     "from": [
+      -2
+     ],
+     "at": 750,
+     "duration": 170,
+     "ease": "linear"
+    }
+   ]
+  },
+  {
+   "piece": "water-front",
+   "origin": [
+    64.0,
+    122.88
+   ],
+   "tracks": [
+    {
+     "kind": "scale",
+     "from": [
+      1,
+      0.45
+     ],
+     "at": 180,
+     "duration": 90,
+     "ease": "out"
+    },
+    {
+     "kind": "scale",
+     "from": [
+      1.02,
+      1.75
+     ],
+     "at": 270,
+     "duration": 130,
+     "ease": "linear"
+    },
+    {
+     "kind": "scale",
+     "from": [
+      0.98,
+      0.62
+     ],
+     "at": 400,
+     "duration": 160,
+     "ease": "linear"
+    },
+    {
+     "kind": "scale",
+     "from": [
+      1,
+      1.18
+     ],
+     "at": 560,
+     "duration": 180,
+     "ease": "out"
+    },
+    {
+     "kind": "translate",
+     "from": [
+      -1.92,
+      0
+     ],
+     "at": 400,
+     "duration": 160,
+     "ease": "linear"
+    },
+    {
+     "kind": "translate",
+     "from": [
+      3.2,
+      0
+     ],
+     "at": 560,
+     "duration": 180,
+     "ease": "linear"
+    },
+    {
+     "kind": "translate",
+     "from": [
+      -1.28,
+      0
+     ],
+     "at": 740,
+     "duration": 180,
+     "ease": "linear"
+    }
+   ]
+  }
+ ]
+}
