@@ -2,7 +2,7 @@ using Gtk;
 
 namespace Singularity.Apps.Help {
 
-    public class HelpApp : Singularity.Application, Singularity.Migration.Migratable {
+    public class HelpApp : Singularity.Application, Singularity.Migration.Migratable, Singularity.Startup.Bootable {
 
         public HelpApp () {
             Object (application_id: "dev.sinty.help", flags: ApplicationFlags.HANDLES_OPEN);
@@ -73,7 +73,41 @@ namespace Singularity.Apps.Help {
             return window;
         }
 
-        public override void activate () {
+        public Singularity.Startup.Plan build_plan (Singularity.Startup.Request request) {
+            var plan = new Singularity.Startup.Plan ();
+            plan.version = "help-1";
+            if (request.kind == Singularity.Startup.RequestKind.SERVICE) {
+                plan.main ("ready", Singularity.Startup.Category.PREPARE, (c) => {})
+                    .reaches (Singularity.Startup.Milestone.SHELL_READY)
+                    .reaches (Singularity.Startup.Milestone.CONTENT_READY)
+                    .reaches (Singularity.Startup.Milestone.INTERACTIVE);
+                return plan;
+            }
+            if (request.kind == Singularity.Startup.RequestKind.OPEN) {
+                var files = request.files ();
+                plan.main ("open-file", Singularity.Startup.Category.CONTENT, (c) => {
+                    open_files (files);
+                    c.window = get_active_window ();
+                }).reaches (Singularity.Startup.Milestone.SHELL_READY)
+                  .reaches (Singularity.Startup.Milestone.CONTENT_READY)
+                  .reaches (Singularity.Startup.Milestone.INTERACTIVE);
+                return plan;
+            }
+            plan.main ("window", Singularity.Startup.Category.SHELL, (c) => {
+                show_window ();
+                c.window = get_active_window ();
+            }).reaches (Singularity.Startup.Milestone.SHELL_READY)
+              .reaches (Singularity.Startup.Milestone.CONTENT_READY)
+              .reaches (Singularity.Startup.Milestone.INTERACTIVE);
+            return plan;
+        }
+
+        public void handle_request (Singularity.Startup.Request request) {
+            if (request.kind == Singularity.Startup.RequestKind.OPEN) open_files (request.files ());
+            else show_window ();
+        }
+
+        private void show_window () {
             ensure_window ();
         }
 
@@ -107,7 +141,7 @@ namespace Singularity.Apps.Help {
             ensure_window ().search_for (text);
         }
 
-        public override void open (File[] files, string hint) {
+        private void open_files (File[] files) {
             var window = ensure_window ();
             foreach (var f in files) window.open_uri (f.get_uri ());
         }
