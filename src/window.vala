@@ -32,6 +32,7 @@ namespace Singularity.Apps.Help {
         private SearchBubble search;
         private uint search_source = 0;
         private Book? book = null;
+        private string typed = "";
 
         public HelpWindow (HelpApp app) {
             Object (application: app);
@@ -46,6 +47,8 @@ namespace Singularity.Apps.Help {
             back_bubble = add_bubble_icon ("go-previous-symbolic", _("Back"), () => go (-1));
             forward_bubble = add_bubble_icon ("go-next-symbolic", _("Forward"), () => go (1));
             search = add_bubble_search (_("Search Help"), (text) => {
+                if (text == typed) return;
+                typed = text;
                 if (search_source != 0) Source.remove (search_source);
                 search_source = Timeout.add (250, () => {
                     search_source = 0;
@@ -141,14 +144,39 @@ namespace Singularity.Apps.Help {
                 history.add (loc);
                 position = history.size - 1;
             }
-            show (loc);
+            show.begin (loc);
         }
 
         private void go (int delta) {
             int target = position + delta;
             if (target < 0 || target >= history.size) return;
             position = target;
-            show (history[position]);
+            show.begin (history[position]);
+        }
+
+        public Variant save_migration () {
+            var trail = new VariantBuilder (new VariantType ("a(sss)"));
+            foreach (var loc in history) trail.add ("(sss)", loc.book, loc.page, loc.query);
+            var d = new VariantDict ();
+            d.insert_value ("history", trail.end ());
+            d.insert_value ("position", new Variant.int32 (position));
+            d.insert_value ("search", new Variant.string (search.entry.text));
+            return d.end ();
+        }
+
+        public async void restore_migration (Variant data) {
+            var d = new VariantDict (data);
+            var text = d.lookup_value ("search", VariantType.STRING);
+            if (text != null) typed = text.get_string ();
+            var trail = d.lookup_value ("history", new VariantType ("a(sss)"));
+            var at = d.lookup_value ("position", VariantType.INT32);
+            if (trail == null || at == null || trail.n_children () == 0) return;
+            history.clear ();
+            var it = trail.iterator ();
+            string b, p, q;
+            while (it.next ("(sss)", out b, out p, out q)) history.add (new Location (b, p, q));
+            position = at.get_int32 ().clamp (0, history.size - 1);
+            yield show (history[position]);
         }
 
         private void sync_nav () {
@@ -165,15 +193,15 @@ namespace Singularity.Apps.Help {
             search_serial++;
         }
 
-        private void show (Location loc) {
+        private async void show (Location loc) {
             sync_nav ();
             foreach (var e in rows.entries) e.value.set_active (loc.query == "" && e.key == loc.book);
             if (loc.query != "") {
-                show_search (loc.query);
+                yield show_search (loc.query);
                 return;
             }
             if (loc.book == "man:") {
-                show_manual.begin (loc.page);
+                yield show_manual (loc.page);
                 return;
             }
             book = library.find (loc.book);
@@ -398,7 +426,7 @@ namespace Singularity.Apps.Help {
             return null;
         }
 
-        private void show_search (string query) {
+        private async void show_search (string query) {
             clear ();
             var hits = library.search (query);
             if (hits.size == 0) hits = library.search_terms ({ query });
@@ -428,7 +456,7 @@ namespace Singularity.Apps.Help {
                 }
                 column.append (block (b, new Page ()));
             }
-            if (Environment.find_program_in_path ("apropos") != null) find_manuals.begin (query);
+            if (Environment.find_program_in_path ("apropos") != null) yield find_manuals (query);
         }
 
         private async void find_manuals (string query) {

@@ -2,7 +2,7 @@ using Gtk;
 
 namespace Singularity.Apps.Help {
 
-    public class HelpApp : Singularity.Application {
+    public class HelpApp : Singularity.Application, Singularity.Migration.Migratable {
 
         public HelpApp () {
             Object (application_id: "dev.sinty.help", flags: ApplicationFlags.HANDLES_OPEN);
@@ -75,6 +75,28 @@ namespace Singularity.Apps.Help {
 
         public override void activate () {
             ensure_window ();
+        }
+
+        public Variant save_model () {
+            return new VariantDict ().end ();
+        }
+
+        public async void restore_model (Variant model) throws Error {
+        }
+
+        public string window_kind (Gtk.Window w) {
+            return (w is HelpWindow) ? "help" : "";
+        }
+
+        public Variant save_window (Gtk.Window w) {
+            return ((HelpWindow) w).save_migration ();
+        }
+
+        public async Gtk.Window? rebuild_window (string kind, Variant data) throws Error {
+            if (kind != "help") return null;
+            var window = new HelpWindow (this);
+            yield window.restore_migration (data);
+            return window;
         }
 
         public void show_uri (string uri) {
